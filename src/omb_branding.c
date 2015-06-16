@@ -75,14 +75,14 @@ omb_device_item *omb_branding_read_info(const char* base_dir, const char *identi
 			pclose(fd);
 		}
 	
-		if (strlen(name) == 0)
-			strcpy(name, identifier);
+//		if (strlen(name) == 0)
+		strcpy(name, identifier);
 		
-		item->label = malloc(strlen(name) + strlen(version) + 10);
+		item->label = malloc(strlen(name) + 10);
 		if (strcmp(identifier, "flash") == 0)
-			sprintf(item->label, "%s %s (flash)", name, version);
+			sprintf(item->label, "%s", name);
 		else
-			sprintf(item->label, "%s %s", name, version);
+			sprintf(item->label, "%s", name);
 	}
 	else {
 		item->label = malloc(strlen(settings_value) + 9);

@@ -424,7 +424,7 @@ void omb_utils_prepare_destination(omb_device_item *item)
 		if (!omb_utils_is_mounted(sys))
 			if (mount("/sys", sys, NULL, MS_BIND, NULL) != 0)
 				omb_log(LOG_ERROR, "cannot bind /sys");
-		
+
 		if (!omb_utils_dir_exists(omb))
 			mkdir(omb, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
@@ -497,9 +497,9 @@ void omb_utils_load_modules_vugl(omb_device_item *item)
 		char cmd[512];
 			
 
-		sprintf(tmp, "%s/%s/%s/etc/init.d/montrun.sh", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
+		sprintf(tmp, "%s/%s/%s/etc/init.d/mountrun.sh", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
 		if(omb_utils_file_exists(tmp)) {
-			sprintf(cmd, "%s %s/%s/%s /etc/init.d/montrun.sh start", OMB_CHROOT_BIN, OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
+			sprintf(cmd, "%s %s/%s/%s /etc/init.d/mountrun.sh start", OMB_CHROOT_BIN, OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
 			system(cmd);
 		}
 

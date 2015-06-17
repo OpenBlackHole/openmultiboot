@@ -224,8 +224,7 @@ int main(int argc, char *argv[])
 /*
  * by Meo. load_modules moved !
  */
-		omb_utils_prepare_destination(item);	
-		omb_utils_setrctype();
+		omb_utils_prepare_destination(item);
 
 		int lock_menu = omb_utils_check_lock_menu();
 		int force = omb_utils_read_int(OMB_SETTINGS_FORCE);
@@ -236,6 +235,7 @@ int main(int argc, char *argv[])
 				if (!omb_utils_file_exists(OMB_VIDEO_DEVICE)) {
 					omb_utils_load_modules_vugl(item);
 				}
+				omb_utils_setrctype();
 			}
 			omb_utils_update_background(item);
 			omb_utils_backup_kernel(item);

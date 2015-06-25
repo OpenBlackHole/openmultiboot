@@ -1,4 +1,3 @@
-AC_PREREQ([2.69])
 AC_INIT(open-multiboot, 0.1)
 AM_INIT_AUTOMAKE
 

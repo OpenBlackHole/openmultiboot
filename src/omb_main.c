@@ -262,8 +262,8 @@ int main(int argc, char *argv[])
 			omb_utils_save(OMB_SETTINGS_SELECTED, item->identifier);
 			omb_utils_save_int(OMB_SETTINGS_FORCE, 1);
 			omb_utils_umount(OMB_MAIN_DIR);
-			system("/etc/init.d/udev stop");
-			omb_utils_reboot();
+			system("reboot");
+//			omb_utils_reboot();
 			is_rebooting = 1;
 		}
 		

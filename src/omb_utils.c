@@ -503,13 +503,13 @@ void omb_utils_load_modules_vugl(omb_device_item *item)
 		char tmp[255];
 		char cmd[512];
 			
-
+/*
 		sprintf(tmp, "%s/%s/%s/etc/init.d/mountrun.sh", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
 		if(omb_utils_file_exists(tmp)) {
 			sprintf(cmd, "%s %s/%s/%s /etc/init.d/mountrun.sh start", OMB_CHROOT_BIN, OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
 			system(cmd);
 		}
-
+*/
 		sprintf(cmd, "%s %s/%s/%s /etc/init.d/mountall.sh start", OMB_CHROOT_BIN, OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
 		system(cmd);
 		

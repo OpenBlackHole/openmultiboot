@@ -371,7 +371,14 @@ void omb_utils_init_system()
 	if (!omb_utils_is_mounted("/sys"))
 		if (mount("sysfs", "/sys", "sysfs", 0, NULL) != 0)
 			omb_log(LOG_ERROR, "cannot mount /sys");
+			
+	omb_log(LOG_DEBUG, "mount run");
+	system("/etc/init.d/mountrun.sh");
 	
+	omb_log(LOG_DEBUG, "run udev");
+	system("/etc/init.d/udev start");
+	
+/*	
 	omb_log(LOG_DEBUG, "mount /media");
 	if (!omb_utils_is_mounted("/media"))
 		if (mount("tmpfs", "/media", "tmpfs", 0, "size=64k") != 0)
@@ -385,6 +392,7 @@ void omb_utils_init_system()
 	
 	// we really need this sleep?? :(
 	sleep(2);
+*/
 }
 
 /*
@@ -482,9 +490,8 @@ void omb_utils_load_modules_vugl(omb_device_item *item)
 
 	if (item == NULL || strcmp(item->identifier, "flash") == 0) 
 	{
-		system("/etc/init.d/mountall.sh start");
-		system("/etc/init.d/modload.sh start");
 		system("/etc/init.d/modutils.sh start");
+		system("/etc/init.d/mountall.sh start");
 		system("/etc/init.d/populate-volatile.sh start");
 		system("/etc/init.d/bootmisc.sh start");
 		system("/etc/init.d/vuplus-platform-util start");

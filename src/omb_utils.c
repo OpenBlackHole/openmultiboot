@@ -589,12 +589,7 @@ void omb_utils_sysvinit(omb_device_item *item, const char *args)
 	}
 	else {
 		char path[255];
-		char udev[255];
 		sprintf(path, "%s/%s/%s", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
-		sprintf(udev, "%s/%s/%s/%s", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier, "/etc/init.d/udev");
-		if (omb_utils_file_exists(udev))
-				system("/etc/init.d/mdev stop");
-				
 		execl(OMB_CHROOT_BIN, OMB_CHROOT_BIN, path, OMB_INIT_BIN, args, NULL);
 	}
 }

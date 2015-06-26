@@ -371,14 +371,14 @@ void omb_utils_init_system()
 	if (!omb_utils_is_mounted("/sys"))
 		if (mount("sysfs", "/sys", "sysfs", 0, NULL) != 0)
 			omb_log(LOG_ERROR, "cannot mount /sys");
-			
+
+/*			
 	omb_log(LOG_DEBUG, "mount run");
 	system("/etc/init.d/mountrun.sh");
 	
 	omb_log(LOG_DEBUG, "run udev");
-	system("/etc/init.d/udev start");
+	system("/etc/init.d/udev start");	
 	
-/*	
 	omb_log(LOG_DEBUG, "mount /media");
 	if (!omb_utils_is_mounted("/media"))
 		if (mount("tmpfs", "/media", "tmpfs", 0, "size=64k") != 0)
@@ -408,13 +408,45 @@ void omb_utils_prepare_destination(omb_device_item *item)
 {	
 	omb_log(LOG_DEBUG, "prepare destination");
 
-	if (item != NULL && strcmp(item->identifier, "flash") != 0)
+	if (item == NULL || strcmp(item->identifier, "flash") == 0) {
+		omb_log(LOG_DEBUG, "mount run");
+		system("/etc/init.d/mountrun.sh");
+		omb_log(LOG_DEBUG, "run udev");
+		system("/etc/init.d/udev start");
+	}
+	else
 	{
 		char dev[255];
 		char proc[255];
 		char sys[255];
 		char omb[255];
 		char omb_plugin[255];
+		char vol[255];
+		char cmd[512];
+		
+		sprintf(vol, "%s/%s/%s/etc/init.d/volatile-media.sh", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
+		if (omb_utils_file_exists(vol)) {
+			omb_log(LOG_DEBUG, "mount /media");
+			if (!omb_utils_is_mounted("/media"))
+				if (mount("tmpfs", "/media", "tmpfs", 0, "size=64k") != 0)
+					omb_log(LOG_ERROR, "cannot mount /media");
+
+			omb_log(LOG_DEBUG, "run volatile media");
+			sprintf(cmd, "%s/%s/%s/etc/init.d/volatile-media.sh", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
+ 			system(cmd);
+
+			omb_log(LOG_DEBUG, "run mdev");
+			sprintf(cmd, "%s/%s/%s/etc/init.d/mdev", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
+ 			system(cmd);
+		
+		}
+		else {
+			omb_log(LOG_DEBUG, "mount run");
+			system("/etc/init.d/mountrun.sh");
+			omb_log(LOG_DEBUG, "run udev");
+			system("/etc/init.d/udev start");
+		}
+		
 		sprintf(dev, "%s/%s/%s/dev", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
 		sprintf(proc, "%s/%s/%s/proc", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
 		sprintf(sys, "%s/%s/%s/sys", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);

@@ -143,19 +143,19 @@ void omb_utils_remount_media(omb_device_item *item)
 	}
 	
 	if (omb_utils_file_exists(vol)) {
-		if (omb_utils_dir_exists("/dev/sda1")) {
+//		if (omb_utils_dir_exists("/dev/sda1")) {
 			if (!omb_utils_dir_exists(hdd))
 				mkdir(hdd, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 			omb_log(LOG_DEBUG, "mount hdd");
 			omb_utils_mount("/dev/sda1", hdd);
-		}
-		if (omb_utils_dir_exists("/dev/sdb1")) {
+//		}
+//		if (omb_utils_dir_exists("/dev/sdb1")) {
 			if (!omb_utils_dir_exists(usb))
 				mkdir(usb, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 			omb_log(LOG_DEBUG, "mount usb");
 			omb_utils_mount("/dev/sdb1", usb);
 		}
-	}	
+//	}	
 	if (omb_utils_umount("/media") == OMB_ERROR)
 		omb_log(LOG_WARNING, "cannot umount /media");
 }

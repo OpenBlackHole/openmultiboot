@@ -380,7 +380,6 @@ omb_utils_build_vu_wrapper(omb_device_item *item)
 }
 void omb_utils_init_system()
 {
-	
 	omb_log(LOG_DEBUG, "mount /proc");
 	if (!omb_utils_is_mounted("/proc"))
 		if (mount("proc", "/proc", "proc", 0, NULL) != 0)
@@ -390,9 +389,10 @@ void omb_utils_init_system()
 	if (!omb_utils_is_mounted("/sys"))
 		if (mount("sysfs", "/sys", "sysfs", 0, NULL) != 0)
 			omb_log(LOG_ERROR, "cannot mount /sys");
-
+			
 	omb_log(LOG_DEBUG, "mount run");
 	system("/etc/init.d/mountrun.sh");
+	
 	omb_log(LOG_DEBUG, "run udev");
 	system("/etc/init.d/udev start");
 	
@@ -508,6 +508,7 @@ void omb_utils_load_modules_vugl(omb_device_item *item)
 
 	if (item == NULL || strcmp(item->identifier, "flash") == 0) 
 	{
+		system("/etc/init.d/modutils.sh start");
 		system("/etc/init.d/mountall.sh start");
 		system("/etc/init.d/populate-volatile.sh start");
 		system("/etc/init.d/bootmisc.sh start");
@@ -520,7 +521,13 @@ void omb_utils_load_modules_vugl(omb_device_item *item)
 		char tmp[255];
 		char cmd[512];
 			
-
+/*
+		sprintf(tmp, "%s/%s/%s/etc/init.d/mountrun.sh", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
+		if(omb_utils_file_exists(tmp)) {
+			sprintf(cmd, "%s %s/%s/%s /etc/init.d/mountrun.sh start", OMB_CHROOT_BIN, OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
+			system(cmd);
+		}
+*/
 		sprintf(cmd, "%s %s/%s/%s /etc/init.d/mountall.sh start", OMB_CHROOT_BIN, OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
 		system(cmd);
 		
@@ -530,10 +537,10 @@ void omb_utils_load_modules_vugl(omb_device_item *item)
 			system(cmd);
 		}
 		
-		sprintf(cmd, "%s %s/%s/%s /etc/init.d/populate-volatile.sh start", OMB_CHROOT_BIN, OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
+		sprintf(cmd, "%s %s/%s/%s /etc/init.d/modutils.sh start", OMB_CHROOT_BIN, OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
 		system(cmd);
 		
-		sprintf(cmd, "%s %s/%s/%s /etc/init.d/devpts.sh", OMB_CHROOT_BIN, OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
+		sprintf(cmd, "%s %s/%s/%s /etc/init.d/populate-volatile.sh start", OMB_CHROOT_BIN, OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
 		system(cmd);
 
 		sprintf(cmd, "%s %s/%s/%s /etc/init.d/bootmisc.sh start", OMB_CHROOT_BIN, OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);

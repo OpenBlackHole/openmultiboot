@@ -270,8 +270,7 @@ int main(int argc, char *argv[])
 		if (!is_rebooting) {
 			if (item != NULL && strcmp(item->identifier, "flash") != 0)
 				omb_utils_remount_media(item);
-//			omb_utils_umount(OMB_MAIN_DIR);
-			system("umount -l /omb");
+			omb_utils_umount(OMB_MAIN_DIR);
 			omb_utils_sysvinit(item, NULL);
 		}
 

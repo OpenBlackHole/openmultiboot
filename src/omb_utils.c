@@ -422,8 +422,27 @@ void omb_utils_prepare_destination(omb_device_item *item)
 		char omb[255];
 		char omb_plugin[255];
 		char vol[255];
-		char cmd[512];
+		char cmd[512];				
 		
+		sprintf(dev, "%s/%s/%s/dev", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
+		sprintf(proc, "%s/%s/%s/proc", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
+		sprintf(sys, "%s/%s/%s/sys", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
+		sprintf(omb, "%s/%s/%s/%s", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier, OMB_MAIN_DIR);
+		sprintf(omb_plugin, "%s/%s/%s/%s", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier, OMB_PLUGIN_DIR);
+		
+		if (!omb_utils_is_mounted(dev))
+			if (mount("/dev", dev, NULL, MS_BIND, NULL) != 0)
+				omb_log(LOG_ERROR, "cannot bind /dev");
+		
+		if (!omb_utils_is_mounted(proc))
+			if (mount("/proc", proc, NULL, MS_BIND, NULL) != 0)
+				omb_log(LOG_ERROR, "cannot bind /proc");
+		
+		if (!omb_utils_is_mounted(sys))
+			if (mount("/sys", sys, NULL, MS_BIND, NULL) != 0)
+				omb_log(LOG_ERROR, "cannot bind /sys");
+
+
 		sprintf(vol, "%s/%s/%s/etc/init.d/volatile-media.sh", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
 		if (omb_utils_file_exists(vol)) {
 			omb_log(LOG_DEBUG, "mount /media");
@@ -446,24 +465,7 @@ void omb_utils_prepare_destination(omb_device_item *item)
 			omb_log(LOG_DEBUG, "run udev");
 			system("/etc/init.d/udev start");
 		}
-		
-		sprintf(dev, "%s/%s/%s/dev", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
-		sprintf(proc, "%s/%s/%s/proc", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
-		sprintf(sys, "%s/%s/%s/sys", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
-		sprintf(omb, "%s/%s/%s/%s", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier, OMB_MAIN_DIR);
-		sprintf(omb_plugin, "%s/%s/%s/%s", OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier, OMB_PLUGIN_DIR);
-		
-		if (!omb_utils_is_mounted(dev))
-			if (mount("/dev", dev, NULL, MS_BIND, NULL) != 0)
-				omb_log(LOG_ERROR, "cannot bind /dev");
-		
-		if (!omb_utils_is_mounted(proc))
-			if (mount("/proc", proc, NULL, MS_BIND, NULL) != 0)
-				omb_log(LOG_ERROR, "cannot bind /proc");
-		
-		if (!omb_utils_is_mounted(sys))
-			if (mount("/sys", sys, NULL, MS_BIND, NULL) != 0)
-				omb_log(LOG_ERROR, "cannot bind /sys");
+
 
 		if (!omb_utils_dir_exists(omb))
 			mkdir(omb, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);

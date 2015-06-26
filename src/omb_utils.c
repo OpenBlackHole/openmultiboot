@@ -115,12 +115,13 @@ void omb_utils_remount_media(omb_device_item *item)
 	if (omb_utils_file_exists(vol)) {
 		omb_log(LOG_DEBUG, "stop udev and run mdev");
 		system("/etc/init.d/udev stop");
-		sprintf(cmd, "%s %s/%s/%s /etc/init.d/mdev", OMB_CHROOT_BIN, OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
-		system(cmd);
 		omb_log(LOG_DEBUG, "remount /media into %s", media);
 		if (!omb_utils_is_mounted(media))
 			if (mount("tmpfs", media, "tmpfs", 0, "size=64k") != 0)
 				omb_log(LOG_ERROR, "cannot mount %s", media);
+		sprintf(cmd, "%s %s/%s/%s /etc/init.d/mdev", OMB_CHROOT_BIN, OMB_MAIN_DIR, OMB_DATA_DIR, item->identifier);
+		system(cmd);
+		sleep(2);
 	}		
 	if ((mtab = setmntent("/etc/mtab", "r")) != NULL) {
 		while ((part = getmntent(mtab)) != NULL) {

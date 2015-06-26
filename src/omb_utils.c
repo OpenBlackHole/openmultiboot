@@ -380,7 +380,7 @@ omb_utils_build_vu_wrapper(omb_device_item *item)
 }
 void omb_utils_init_system()
 {
-/*	
+	
 	omb_log(LOG_DEBUG, "mount /proc");
 	if (!omb_utils_is_mounted("/proc"))
 		if (mount("proc", "/proc", "proc", 0, NULL) != 0)
@@ -390,8 +390,7 @@ void omb_utils_init_system()
 	if (!omb_utils_is_mounted("/sys"))
 		if (mount("sysfs", "/sys", "sysfs", 0, NULL) != 0)
 			omb_log(LOG_ERROR, "cannot mount /sys");
-*/			
-	system("/etc/init.d/sysfs.sh");
+
 	omb_log(LOG_DEBUG, "mount run");
 	system("/etc/init.d/mountrun.sh");
 	omb_log(LOG_DEBUG, "run udev");
